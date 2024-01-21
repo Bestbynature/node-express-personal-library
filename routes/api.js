@@ -82,10 +82,6 @@ module.exports = function (app) {
     
         book = await book.save();
     
-        // if (!book) {
-        //   return res.status(400).send('no book exists');
-        // }
-    
         return res.status(200).json({
           _id: book._id,
           title: book.title,
