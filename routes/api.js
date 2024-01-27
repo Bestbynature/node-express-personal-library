@@ -51,7 +51,6 @@ module.exports = function (app) {
       if (!book) {
         return res.send('no book exists');
       }
-      console.log(book);
 
       return res.json(book);
     })
@@ -67,19 +66,11 @@ module.exports = function (app) {
         return res.status(400).send('missing required field comment');
       }
 
-      console.log(req.body)
-
       try {
 
         let book = await BookModel.findById(id).exec();
     
-        // if (!book) {
-        //   return res.status(400).send('no book exists');
-        // }
-    
         book.comments.push(comment);
-        // book.commentcount = book.comments.length;
-    
         book = await book.save();
     
         return res.status(200).json({
@@ -107,7 +98,6 @@ module.exports = function (app) {
         }
         return res.send('delete successful');
       } catch (error) {
-        console.error(error);
         return res.status(500).send('internal server error');
       }
     });
