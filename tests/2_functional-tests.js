@@ -40,7 +40,6 @@ suite('Functional Tests', function() {
   suite('Routing tests', function() {
 
     let id1 = '';
-    let id2 = '';
 
     suite('POST /api/books with title => create book object/expect book object', function() {
       
@@ -139,7 +138,6 @@ suite('Functional Tests', function() {
           assert.equal(res.body._id, id1);
           assert.equal(res.body.title, 'test');
           assert.isArray(res.body.comments);
-          // assert.equal(res.body.commentcount, 1);
           done();
         });
       });
