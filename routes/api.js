@@ -59,30 +59,49 @@ module.exports = function (app) {
       const { comment } = req.body;
 
       if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).send('no book exists');
+        // return res.status(400).send("no book exists");
+        return res.json("no book exists");
       }
 
       if (!comment) {
-        return res.status(400).send('missing required field comment');
+        // return res.status(400).send('missing required field comment');
+        // console.log("returned value when no comment is =>")
+        return res.json("missing required field comment");
       }
 
-      try {
+      const updatedBook = await BookModel.findByIdAndUpdate(
+        id,
+        {$push: {comments: comment},
+        $inc: {commentcount: 1}},
+        {new: true}
+      )
 
-        let book = await BookModel.findById(id).exec();
-    
-        book.comments.push(comment);
-        book = await book.save();
-    
-        return res.status(200).json({
-          _id: book._id,
-          title: book.title,
-          comments: book.comments,
-          commentcount: book.commentcount
-        });
-      } catch (error) {
-        console.error(error);
-        return res.status(500).send('no book exists');
+      console.log('updatedBook is =>', updatedBook)
+
+      if (!updatedBook) {
+        // return res.status(400).send('no book exists');
+        return res.json('no book exists');
       }
+
+      return res.status(200).send(updatedBook);
+
+      // try {
+
+      //   let book = await BookModel.findById(id).exec();
+    
+      //   book.comments.push(comment);
+      //   book = await book.save();
+    
+      //   return res.status(200).json({
+      //     _id: book._id,
+      //     title: book.title,
+      //     comments: book.comments,
+      //     commentcount: book.commentcount
+      //   });
+      // } catch (error) {
+      //   console.error(error);
+      //   return res.status(500).send('no book exists');
+      // }
     })
     .delete(async function(req, res){
       let bookid = req.params.id;
